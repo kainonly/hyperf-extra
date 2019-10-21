@@ -1,3 +1,3 @@
 # Hyperf Extra
 
-Extra library for Lumen framework
+Extra library for Hyperf framework
