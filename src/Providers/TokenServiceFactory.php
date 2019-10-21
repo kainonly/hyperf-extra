@@ -1,6 +1,6 @@
 <?php
 
-namespace Hyperf\Extra\Provider;
+namespace Hyperf\Extra\Providers;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Extra\Contract\UtilsServiceInterface;
