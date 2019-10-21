@@ -1,6 +1,6 @@
 {
   "name": "kain/hyperf-extra",
-  "description": "Extra library for Lumen framework",
+  "description": "Extra library for Hyperf framework",
   "require": {
     "ext-swoole": ">=4.4",
     "hyperf/framework": "~1.1.0"
