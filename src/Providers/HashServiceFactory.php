@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Provider;
+namespace Hyperf\Extra\Providers;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Extra\Service\HashService;
