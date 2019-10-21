@@ -1,0 +1,20 @@
+{
+  "name": "kain/hyperf-extra",
+  "description": "Extra library for Lumen framework",
+  "require": {
+    "ext-swoole": ">=4.4",
+    "hyperf/framework": "~1.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "hyperf\\extra\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "kain",
+      "email": "zhangtqx@vip.qq.com"
+    }
+  ],
+  "license": "MIT"
+}
