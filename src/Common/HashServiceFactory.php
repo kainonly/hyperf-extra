@@ -7,7 +7,7 @@ use Hyperf\Contract\ConfigInterface;
 use Hyperf\Extra\Service\HashService;
 use Psr\Container\ContainerInterface;
 
-class HashServiceFactory
+final class HashServiceFactory
 {
     public function __invoke(ContainerInterface $container)
     {
