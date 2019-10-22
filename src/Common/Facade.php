@@ -6,37 +6,26 @@ use Hyperf\Server\Exception\RuntimeException;
 use Hyperf\Utils\ApplicationContext;
 use Psr\Container\ContainerInterface;
 
-class Facade
+abstract class Facade
 {
     /**
-     *
-     * @var ContainerInterface
+     * Create Facade Object
+     * @return mixed
+     * @throws \RuntimeException
      */
-    protected static $container;
-
-    /**
-     * @return ContainerInterface
-     */
-    public static function getContainer()
+    protected static function createFacade()
     {
-        return static::$container;
-    }
-
-    /**
-     * Set the application instance.
-     * @param ContainerInterface $container
-     * @return void
-     */
-    public static function setContainer(ContainerInterface $container)
-    {
-        static::$container = $container;
+        $container = ApplicationContext::getContainer();
+        $facadeClass = static::getFacadeAccessor();
+        if (!$container->has($facadeClass)) {
+            throw new RuntimeException('Injection dependency does not exist.');
+        }
+        return $container->get($facadeClass);
     }
 
     /**
      * Get the registered name of the component.
-     *
      * @return string
-     *
      * @throws \RuntimeException
      */
     protected static function getFacadeAccessor()
@@ -51,11 +40,8 @@ class Facade
      */
     public static function __callStatic($method, $arguments)
     {
-        static::$container = ApplicationContext::getContainer();
-        $service = $container->get(static::getFacadeAccessor());
-
         return call_user_func_array(
-            [$service, $method],
+            [static::createFacade(), $method],
             $arguments
         );
     }
