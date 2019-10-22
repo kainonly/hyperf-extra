@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace Hyperf\Extra\Support\Facades;
 
@@ -12,7 +12,7 @@ use Hyperf\Extra\Contract\HashServiceInterface;
  * @method static string make(string $password, array $options = [])
  * @method static boolean check(string $password, string $hash)
  */
-class Hash extends Facade
+final class Hash extends Facade
 {
     protected static function getFacadeAccessor()
     {

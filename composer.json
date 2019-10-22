@@ -3,7 +3,9 @@
   "description": "Extra library for Hyperf framework",
   "require": {
     "ext-swoole": ">=4.4",
-    "hyperf/framework": "~1.1.0"
+    "hyperf/framework": "~1.1.0",
+    "ramsey/uuid": "^3.8",
+    "lcobucci/jwt": "^3.3"
   },
   "autoload": {
     "psr-4": {

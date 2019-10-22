@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Hyperf\Extra\Support\Facades;
 
@@ -11,7 +12,7 @@ use Ramsey\Uuid\Uuid;
  * @package Hyperf\Extra\Support\Facades
  * @method static Uuid|\Ramsey\Uuid\UuidInterface uuid()
  */
-class Utils extends Facade
+final class Utils extends Facade
 {
     protected static function getFacadeAccessor()
     {
