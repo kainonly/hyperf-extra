@@ -37,37 +37,21 @@ final class UtilsService implements UtilsServiceInterface
      * Create Cookie Object
      * @param string $name
      * @param string $value
-     * @param int|null $expire
-     * @param string|null $path
-     * @param string|null $domain
-     * @param bool|null $secure
-     * @param bool|null $httpOnly
-     * @param bool|null $raw
-     * @param string|null $sameSite
+     * @param array $options
      * @return Cookie
      */
-    public function cookie(
-        string $name,
-        string $value,
-        ?int $expire,
-        ?string $path,
-        ?string $domain,
-        ?bool $secure,
-        ?bool $httpOnly,
-        ?bool $raw,
-        ?string $sameSite
-    )
+    public function cookie(string $name, string $value, array $options = [])
     {
         return new Cookie(
             $name,
             $value,
-            $expire ? $expire : $this->cookieOption['expire'],
-            $path ? $path : $this->cookieOption['path'],
-            $domain ? $domain : $this->cookieOption['domain'],
-            $secure ? $secure : $this->cookieOption['secure'],
-            $httpOnly ? $httpOnly : $this->cookieOption['httpOnly'],
-            $raw ? $raw : $this->cookieOption['raw'],
-            $sameSite ? $sameSite : $this->cookieOption['sameSite']
+            !empty($options['expire']) ? $options['expire'] : $this->cookieOption['expire'],
+            !empty($options['path']) ? $options['path'] : $this->cookieOption['path'],
+            !empty($options['domain']) ? $options['domain'] : $this->cookieOption['domain'],
+            !empty($options['secure']) ? $options['secure'] : $this->cookieOption['secure'],
+            !empty($options['httpOnly']) ? $options['httpOnly'] : $this->cookieOption['httpOnly'],
+            !empty($options['raw']) ? $options['raw'] : $this->cookieOption['raw'],
+            !empty($options['sameSite']) ? $options['sameSite'] : $this->cookieOption['sameSite']
         );
     }
 }
