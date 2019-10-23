@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Service;
 
+use Hyperf\Extra\Contract\TokenServiceInterface;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 
-final class TokenService
+final class TokenService implements TokenServiceInterface
 {
     /**
      * Token secret
