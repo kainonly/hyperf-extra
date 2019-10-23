@@ -11,7 +11,7 @@ interface TokenServiceInterface
      * @param string $jti
      * @param string $ack
      * @param array $symbol
-     * @return \Lcobucci\JWT\Token
+     * @return \Lcobucci\JWT\Token|false
      */
     public function create(string $scene, string $jti, string $ack, array $symbol = []);
 
