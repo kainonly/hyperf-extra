@@ -74,7 +74,7 @@ final class TokenService
      * Verification token
      * @param string $scene
      * @param string $tokenString
-     * @return bool
+     * @return \stdClass
      * @throws \Exception
      */
     public function verify(string $scene, string $tokenString)
@@ -89,6 +89,9 @@ final class TokenService
             throw new \Exception('Token information is incorrect');
         }
 
-        return !$token->isExpired();
+        $result = new \stdClass();
+        $result->expired = $token->isExpired();
+        $result->token = $token;
+        return $result;
     }
 }
