@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Service;
 
-use Hyperf\Extra\Contract\UtilsServiceInterface;
-use Hyperf\Utils\Str;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -31,35 +29,27 @@ final class TokenService
     private $signer;
 
     /**
-     * @var UtilsServiceInterface
-     */
-    private $utils;
-
-    /**
      * TokenService constructor.
      * @param string $secret
      * @param array $config
-     * @param UtilsServiceInterface $utils
      */
-    public function __construct(string $secret, array $options, UtilsServiceInterface $utils)
+    public function __construct(string $secret, array $options)
     {
         $this->secret = $secret;
         $this->options = $options;
-        $this->utils = $utils;
         $this->signer = new Sha256();
     }
 
     /**
      * Generate token
      * @param string $scene
+     * @param string $jti
+     * @param string $ack
      * @param array $symbol
      * @return \Lcobucci\JWT\Token
-     * @throws \Exception
      */
-    public function create(string $scene, array $symbol = [])
+    public function create(string $scene, string $jti, string $ack, array $symbol = [])
     {
-        $jti = $this->utils->uuid()->toString();
-        $ack = Str::random();
         return (new Builder())
             ->issuedBy($this->options[$scene]['issuer'])
             ->permittedFor($this->options[$scene]['audience'])
@@ -99,10 +89,6 @@ final class TokenService
             throw new \Exception('Token information is incorrect');
         }
 
-        if ($token->isExpired()) {
-            throw new \Exception('Token expiration time has expired');
-        }
-
-        return true;
+        return !$token->isExpired();
     }
 }
