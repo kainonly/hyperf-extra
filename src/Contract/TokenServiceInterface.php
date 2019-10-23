@@ -26,7 +26,7 @@ interface TokenServiceInterface
      * Verification token
      * @param string $scene
      * @param string $tokenString
-     * @return bool
+     * @return \stdClass
      * @throws \Exception
      */
     public function verify(string $scene, string $tokenString);
