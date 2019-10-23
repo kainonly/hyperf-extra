@@ -47,18 +47,18 @@ final class TokenService implements TokenServiceInterface
      * @param string $jti
      * @param string $ack
      * @param array $symbol
-     * @return \Lcobucci\JWT\Token
+     * @return \Lcobucci\JWT\Token|false
      */
     public function create(string $scene, string $jti, string $ack, array $symbol = [])
     {
-        return (new Builder())
+        return !empty($this->options[$scene]) ? (new Builder())
             ->issuedBy($this->options[$scene]['issuer'])
             ->permittedFor($this->options[$scene]['audience'])
             ->identifiedBy($jti, true)
             ->withClaim('ack', $ack)
             ->withClaim('symbol', $symbol)
             ->expiresAt(time() + $this->options[$scene]['expires'])
-            ->getToken($this->signer, new Key($this->secret));
+            ->getToken($this->signer, new Key($this->secret)) : false;
     }
 
     /**
