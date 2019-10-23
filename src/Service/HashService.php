@@ -16,6 +16,11 @@ final class HashService implements HashServiceInterface
      */
     private $options;
 
+    /**
+     * HashService constructor.
+     * @param string $driver
+     * @param array $options
+     */
     public function __construct(string $driver, array $options)
     {
         $this->options = $options;
