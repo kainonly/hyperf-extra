@@ -3,13 +3,18 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Service;
 
-use Hyperf\Extra\Contract\TokenServiceInterface;
+use Exception;
+use stdClass;
+use Hyperf\HttpServer\Exception\Http\InvalidResponseException;
+use Hyperf\Server\Exception\RuntimeException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Hyperf\Extra\Contract\TokenServiceInterface;
+use Lcobucci\JWT\Token;
 
-final class TokenService implements TokenServiceInterface
+class TokenService implements TokenServiceInterface
 {
     /**
      * Token secret
@@ -24,12 +29,6 @@ final class TokenService implements TokenServiceInterface
     private $options;
 
     /**
-     * Token signer
-     * @var Sha256 $signer
-     */
-    private $signer;
-
-    /**
      * TokenService constructor.
      * @param string $secret
      * @param array $config
@@ -38,35 +37,39 @@ final class TokenService implements TokenServiceInterface
     {
         $this->secret = $secret;
         $this->options = $options;
-        $this->signer = new Sha256();
     }
 
     /**
-     * Generate token
      * @param string $scene
      * @param string $jti
      * @param string $ack
      * @param array $symbol
-     * @return \Lcobucci\JWT\Token|false
+     * @return Token
+     * @inheritDoc
      */
-    public function create(string $scene, string $jti, string $ack, array $symbol = [])
+    public function create(string $scene, string $jti, string $ack, array $symbol = []): Token
     {
-        return !empty($this->options[$scene]) ? (new Builder())
+        if (empty($this->options[$scene])) {
+            throw new RuntimeException("The [$scene] does not exist.");
+        }
+
+        return (new Builder())
             ->issuedBy($this->options[$scene]['issuer'])
             ->permittedFor($this->options[$scene]['audience'])
             ->identifiedBy($jti, true)
             ->withClaim('ack', $ack)
             ->withClaim('symbol', $symbol)
             ->expiresAt(time() + $this->options[$scene]['expires'])
-            ->getToken($this->signer, new Key($this->secret)) : false;
+            ->getToken(new Sha256(), new Key($this->secret));
     }
 
     /**
      * Get token
      * @param string $tokenString
-     * @return \Lcobucci\JWT\Token
+     * @return Token
+     * @inheritDoc
      */
-    public function get(string $tokenString)
+    public function get(string $tokenString): Token
     {
         return (new Parser())->parse($tokenString);
     }
@@ -75,22 +78,21 @@ final class TokenService implements TokenServiceInterface
      * Verification token
      * @param string $scene
      * @param string $tokenString
-     * @return \stdClass
-     * @throws \Exception
+     * @return stdClass
      */
-    public function verify(string $scene, string $tokenString)
+    public function verify(string $scene, string $tokenString): stdClass
     {
         $token = (new Parser())->parse($tokenString);
-        if (!$token->verify($this->signer, $this->secret)) {
-            throw new \Exception('Token validation is incorrect');
+        if (!$token->verify(new Sha256(), $this->secret)) {
+            throw new RuntimeException('Token validation is incorrect');
         }
 
         if ($token->getClaim('iss') != $this->options[$scene]['issuer'] ||
             $token->getClaim('aud') != $this->options[$scene]['audience']) {
-            throw new \Exception('Token information is incorrect');
+            throw new InvalidResponseException('Token information is incorrect');
         }
 
-        $result = new \stdClass();
+        $result = new stdClass();
         $result->expired = $token->isExpired();
         $result->token = $token;
         return $result;

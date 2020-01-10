@@ -3,16 +3,17 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Contract;
 
+use Exception;
 use Hyperf\HttpMessage\Cookie\Cookie;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 interface UtilsServiceInterface
 {
     /**
-     * @return Uuid|\Ramsey\Uuid\UuidInterface
-     * @throws \Exception
+     * @return UuidInterface
+     * @throws Exception
      */
-    public function uuid();
+    public function uuid(): UuidInterface;
 
     /**
      * Create Cookie Object
@@ -21,5 +22,5 @@ interface UtilsServiceInterface
      * @param array $options
      * @return Cookie
      */
-    public function cookie(string $name, string $value, array $options = []);
+    public function cookie(string $name, string $value, array $options = []): Cookie;
 }

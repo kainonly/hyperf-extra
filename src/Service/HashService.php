@@ -5,12 +5,12 @@ namespace Hyperf\Extra\Service;
 
 use Hyperf\Extra\Contract\HashServiceInterface;
 
-final class HashService implements HashServiceInterface
+class HashService implements HashServiceInterface
 {
     /**
      * @var int
      */
-    private $algo = PASSWORD_ARGON2ID;
+    private $algo;
     /**
      * @var array
      */
@@ -18,21 +18,22 @@ final class HashService implements HashServiceInterface
 
     /**
      * HashService constructor.
-     * @param string $driver
      * @param array $options
      */
-    public function __construct(string $driver, array $options)
+    public function __construct(array $options)
     {
-        $this->options = $options;
-        switch ($driver) {
-            case 'bcrypt':
-                $this->algo = PASSWORD_BCRYPT;
+        switch ($options['driver']) {
+            case 'argon2id':
+                $this->algo = PASSWORD_ARGON2ID;
+                $this->options = $options['argon'];
                 break;
             case 'argon':
                 $this->algo = PASSWORD_ARGON2I;
+                $this->options = $options['argon'];
                 break;
-            case 'argon2id':
-                $this->algo = PASSWORD_ARGON2ID;
+            case 'bcrypt':
+                $this->algo = PASSWORD_BCRYPT;
+                $this->options = $options['bcrypt'];
                 break;
         }
     }
@@ -40,20 +41,26 @@ final class HashService implements HashServiceInterface
     /**
      * @param string $password
      * @param array $options
-     * @return false|string
+     * @return false|string|null
+     * @inheritDoc
      */
-    public function make(string $password, array $options = [])
+    public function create(string $password, array $options = [])
     {
-        return password_hash($password, $this->algo, array_merge($this->options, $options));
+        return password_hash(
+            $password,
+            $this->algo,
+            !empty($options) ? $options : $this->options
+        );
     }
 
     /**
      * @param string $password
-     * @param string $hash
+     * @param string $hashPassword
      * @return bool
+     * @inheritDoc
      */
-    public function check(string $password, string $hash)
+    public function check(string $password, string $hashPassword): bool
     {
-        return password_verify($password, $hash);
+        return password_verify($password, $hashPassword);
     }
 }

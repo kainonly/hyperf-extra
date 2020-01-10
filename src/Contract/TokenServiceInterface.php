@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Contract;
 
+use Lcobucci\JWT\Token;
+use stdClass;
+
 interface TokenServiceInterface
 {
     /**
@@ -11,23 +14,22 @@ interface TokenServiceInterface
      * @param string $jti
      * @param string $ack
      * @param array $symbol
-     * @return \Lcobucci\JWT\Token|false
+     * @return Token
      */
-    public function create(string $scene, string $jti, string $ack, array $symbol = []);
+    public function create(string $scene, string $jti, string $ack, array $symbol = []): Token;
 
     /**
      * Get token
      * @param string $tokenString
-     * @return \Lcobucci\JWT\Token
+     * @return Token
      */
-    public function get(string $tokenString);
+    public function get(string $tokenString): Token;
 
     /**
      * Verification token
      * @param string $scene
      * @param string $tokenString
-     * @return \stdClass
-     * @throws \Exception
+     * @return stdClass
      */
-    public function verify(string $scene, string $tokenString);
+    public function verify(string $scene, string $tokenString): stdClass;
 }

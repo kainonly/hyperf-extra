@@ -7,7 +7,7 @@ use Hyperf\Contract\ConfigInterface;
 use Hyperf\Extra\Service\UtilsService;
 use Psr\Container\ContainerInterface;
 
-final class UtilsServiceFactory
+class UtilsServiceFactory
 {
     public function __invoke(ContainerInterface $container)
     {
