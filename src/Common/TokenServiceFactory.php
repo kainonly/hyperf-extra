@@ -7,7 +7,7 @@ use Hyperf\Contract\ConfigInterface;
 use Hyperf\Extra\Service\TokenService;
 use Psr\Container\ContainerInterface;
 
-final class TokenServiceFactory
+class TokenServiceFactory
 {
     public function __invoke(ContainerInterface $container)
     {

@@ -10,12 +10,12 @@ interface HashServiceInterface
      * @param array $options
      * @return false|string
      */
-    public function make(string $password, array $options = []);
+    public function create(string $password, array $options = []);
 
     /**
      * @param string $password
-     * @param string $hash
+     * @param string $hashPassword
      * @return bool
      */
-    public function check(string $password, string $hash);
+    public function check(string $password, string $hashPassword): bool;
 }
