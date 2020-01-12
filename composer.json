@@ -2,6 +2,7 @@
   "name": "kain/hyperf-extra",
   "description": "Extra library for Hyperf framework",
   "require": {
+    "php": ">=7.4",
     "ext-swoole": ">=4.4",
     "hyperf/framework": "~1.1.0",
     "ramsey/uuid": "^3.8",
