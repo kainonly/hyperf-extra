@@ -14,7 +14,7 @@ class UtilsService implements UtilsServiceInterface
     /**
      * @var array
      */
-    private $cookieOption = [];
+    private array $cookieOption = [];
 
     /**
      * UtilsService constructor.

@@ -7,14 +7,8 @@ use Hyperf\Extra\Contract\HashServiceInterface;
 
 class HashService implements HashServiceInterface
 {
-    /**
-     * @var int
-     */
-    private $algo;
-    /**
-     * @var array
-     */
-    private $options;
+    private string $algo;
+    private array $options;
 
     /**
      * HashService constructor.
@@ -49,7 +43,7 @@ class HashService implements HashServiceInterface
         return password_hash(
             $password,
             $this->algo,
-            !empty($options) ? $options : $this->options
+            $options ?? $this->options
         );
     }
 

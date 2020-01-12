@@ -20,13 +20,13 @@ class TokenService implements TokenServiceInterface
      * Token secret
      * @var string $secret
      */
-    private $secret;
+    private string $secret;
 
     /**
      * Token options
      * @var array $options
      */
-    private $options;
+    private array $options;
 
     /**
      * TokenService constructor.
@@ -71,7 +71,7 @@ class TokenService implements TokenServiceInterface
      */
     public function get(string $tokenString): Token
     {
-        return (new Parser())->parse($tokenString);
+        return (new Parser)->parse($tokenString);
     }
 
     /**
