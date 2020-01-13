@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Service;
 
-use Exception;
 use stdClass;
 use Hyperf\HttpServer\Exception\Http\InvalidResponseException;
 use Hyperf\Server\Exception\RuntimeException;
@@ -31,7 +30,7 @@ class TokenService implements TokenServiceInterface
     /**
      * TokenService constructor.
      * @param string $secret
-     * @param array $config
+     * @param array $options
      */
     public function __construct(string $secret, array $options)
     {
