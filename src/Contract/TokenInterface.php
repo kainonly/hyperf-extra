@@ -6,7 +6,7 @@ namespace Hyperf\Extra\Contract;
 use Lcobucci\JWT\Token;
 use stdClass;
 
-interface TokenServiceInterface
+interface TokenInterface
 {
     /**
      * Generate token
