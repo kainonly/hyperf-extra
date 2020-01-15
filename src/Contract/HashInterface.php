@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Contract;
 
-interface HashServiceInterface
+interface HashInterface
 {
     /**
      * @param string $password

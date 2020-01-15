@@ -7,7 +7,7 @@ use Exception;
 use Hyperf\HttpMessage\Cookie\Cookie;
 use Ramsey\Uuid\UuidInterface;
 
-interface UtilsServiceInterface
+interface UtilsInterface
 {
     /**
      * @return UuidInterface
