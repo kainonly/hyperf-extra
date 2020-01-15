@@ -3,28 +3,40 @@ declare(strict_types=1);
 
 namespace HyperfExtraTest;
 
-use Hyperf\Di\Annotation\Inject;
 use Hyperf\Extra\Contract\HashInterface;
-use Hyperf\Extra\Common\HashFactory;
 use Hyperf\Utils\ApplicationContext;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 
 class HashTest extends TestCase
 {
-    private ContainerInterface $container;
     private HashInterface $hash;
+    private string $password;
 
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->hash = make(HashFactory::class);
+        $container = ApplicationContext::getContainer();
+        $this->hash = $container->get(HashInterface::class);
     }
 
-    public function testCreate()
+    public function setUp()
     {
-//        $password = $this->hash->create('123456');
-        $this->assertNull(null);
+        parent::setUp();
+        $this->password = 'mypassword';
     }
 
+    public function testCreateHash()
+    {
+        $hashContext = $this->hash->create($this->password);
+        $this->assertNotEmpty($hashContext);
+        return $hashContext;
+    }
+
+    /**
+     * @depends testCreateHash
+     */
+    public function testCheckHash(string $context)
+    {
+        $this->assertTrue($this->hash->check($this->password, $context));
+    }
 }
