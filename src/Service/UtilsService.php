@@ -14,7 +14,7 @@ class UtilsService
         $config = $container->get(ConfigInterface::class);
         $cookie = $config->get('cookie');
         return make(UtilsFactory::class, [
-            $cookie,
+            $cookie
         ]);
     }
 }

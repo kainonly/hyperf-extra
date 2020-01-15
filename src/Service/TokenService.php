@@ -12,10 +12,11 @@ class TokenService
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get(ConfigInterface::class);
-        $params = $config->get('token');
+        $key = $config->get('app_key');
+        $options = $config->get('token');
         return make(TokenFactory::class, [
-            $params['key'],
-            $params['options']
+            $key,
+            $options
         ]);
     }
 }
