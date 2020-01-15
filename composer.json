@@ -8,9 +8,17 @@
     "ramsey/uuid": "^3.8",
     "lcobucci/jwt": "^3.3"
   },
+  "require-dev": {
+    "hyperf/testing": "~1.1.0"
+  },
   "autoload": {
     "psr-4": {
       "Hyperf\\Extra\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HyperfExtraTest\\": "tests/"
     }
   },
   "authors": [
