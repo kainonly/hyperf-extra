@@ -1,20 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Service;
+namespace Hyperf\Extra\Token;
 
 use Hyperf\Contract\ConfigInterface;
-use Hyperf\Extra\Common\UtilsFactory;
 use Psr\Container\ContainerInterface;
 
-class UtilsService
+class TokenService
 {
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get(ConfigInterface::class);
-        $cookie = $config->get('cookie');
-        return make(UtilsFactory::class, [
-            $cookie
+        $key = $config->get('app_key');
+        $options = $config->get('token');
+        return make(TokenFactory::class, [
+            $key,
+            $options
         ]);
     }
 }

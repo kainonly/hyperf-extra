@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace HyperfExtraTest;
 
-use Hyperf\Extra\Contract\HashInterface;
-use Hyperf\Extra\Contract\UtilsInterface;
+use Exception;
+use Hyperf\Extra\Utils\UtilsInterface;
 use Hyperf\Utils\ApplicationContext;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -21,7 +21,7 @@ class UtilsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @expectedException
      */
     public function testUuid()

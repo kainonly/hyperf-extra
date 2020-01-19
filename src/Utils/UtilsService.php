@@ -1,20 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Service;
+namespace Hyperf\Extra\Utils;
 
 use Hyperf\Contract\ConfigInterface;
-use Hyperf\Extra\Common\CorsFactory;
 use Psr\Container\ContainerInterface;
 
-class CorsService
+class UtilsService
 {
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get(ConfigInterface::class);
-        $options = $config->get('cors');
-        return make(CorsFactory::class, [
-            $options
+        $cookie = $config->get('cookie');
+        return make(UtilsFactory::class, [
+            $cookie
         ]);
     }
 }

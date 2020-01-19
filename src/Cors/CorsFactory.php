@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Common;
-
-use Hyperf\Extra\Contract\CorsInterface;
+namespace Hyperf\Extra\Cors;
 
 class CorsFactory implements CorsInterface
 {

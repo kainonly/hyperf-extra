@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Common;
+namespace Hyperf\Extra\Token;
 
 use stdClass;
 use Hyperf\HttpServer\Exception\Http\InvalidResponseException;
@@ -10,7 +10,6 @@ use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Hyperf\Extra\Contract\TokenInterface;
 use Lcobucci\JWT\Token;
 
 class TokenFactory implements TokenInterface
