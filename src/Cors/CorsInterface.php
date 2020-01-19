@@ -8,11 +8,6 @@ interface CorsInterface
     /**
      * @return array
      */
-    public function getPaths(): array;
-
-    /**
-     * @return array
-     */
     public function getAllowedMethods(): array;
 
     /**
@@ -23,17 +18,12 @@ interface CorsInterface
     /**
      * @return array
      */
-    public function getAllowedOriginsPatterns(): array;
+    public function getAllowedHeaders(): array;
 
     /**
      * @return array
      */
-    public function getAllowedHeaders(): array;
-
-    /**
-     * @return bool
-     */
-    public function isExposedHeaders(): bool;
+    public function getExposedHeaders(): array;
 
     /**
      * @return int
@@ -43,5 +33,5 @@ interface CorsInterface
     /**
      * @return bool
      */
-    public function isSupportsCredentials(): bool;
+    public function isAllowedCredentials(): bool;
 }
