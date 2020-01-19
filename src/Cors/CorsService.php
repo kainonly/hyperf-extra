@@ -1,19 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Service;
+namespace Hyperf\Extra\Cors;
 
 use Hyperf\Contract\ConfigInterface;
-use Hyperf\Extra\Common\HashFactory;
 use Psr\Container\ContainerInterface;
 
-class HashService
+class CorsService
 {
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get(ConfigInterface::class);
-        $options = $config->get('hashing');
-        return make(HashFactory::class, [
+        $options = $config->get('cors');
+        return make(CorsFactory::class, [
             $options
         ]);
     }

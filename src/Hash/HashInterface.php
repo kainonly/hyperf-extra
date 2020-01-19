@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Contract;
+namespace Hyperf\Extra\Hash;
 
 interface HashInterface
 {

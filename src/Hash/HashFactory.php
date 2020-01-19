@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Common;
-
-use Hyperf\Extra\Contract\HashInterface;
+namespace Hyperf\Extra\Hash;
 
 class HashFactory implements HashInterface
 {

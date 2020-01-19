@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace HyperfExtraTest;
 
-use Hyperf\Extra\Contract\TokenInterface;
+use Hyperf\Extra\Token\TokenInterface;
 use Hyperf\Utils\ApplicationContext;
 use Lcobucci\JWT\Token;
 use PHPUnit\Framework\TestCase;

@@ -1,10 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Hyperf\Extra\Common;
+namespace Hyperf\Extra\Utils;
 
 use Exception;
-use Hyperf\Extra\Contract\UtilsInterface;
 use Hyperf\HttpMessage\Cookie\Cookie;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;

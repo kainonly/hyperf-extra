@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace HyperfExtraTest;
 
-use Hyperf\Extra\Contract\HashInterface;
+use Hyperf\Extra\Hash\HashInterface;
 use Hyperf\Utils\ApplicationContext;
 use PHPUnit\Framework\TestCase;
 
