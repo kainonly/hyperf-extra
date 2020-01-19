@@ -11,9 +11,6 @@ use Ramsey\Uuid\UuidInterface;
 
 class UtilsFactory implements UtilsInterface
 {
-    /**
-     * @var array
-     */
     private array $cookieOption = [];
 
     /**
@@ -23,6 +20,14 @@ class UtilsFactory implements UtilsInterface
     public function __construct(array $cookieOption)
     {
         $this->cookieOption = $cookieOption;
+        $this->cookieOption['expire'] ??= 0;
+        $this->cookieOption['path'] ??= '/';
+        $this->cookieOption['domain'] ??= '';
+        $this->cookieOption['secure'] ??= false;
+        $this->cookieOption['httponly'] ??= false;
+        $this->cookieOption['setcookie'] ??= true;
+        $this->cookieOption['raw'] ??= false;
+        $this->cookieOption['samesite'] ??= null;
     }
 
     /**
@@ -52,9 +57,9 @@ class UtilsFactory implements UtilsInterface
             $options['path'],
             $options['domain'],
             $options['secure'],
-            $options['httpOnly'],
+            $options['httponly'],
             $options['raw'],
-            $options['sameSite']
+            $options['samesite']
         );
     }
 }
