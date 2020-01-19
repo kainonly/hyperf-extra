@@ -60,7 +60,7 @@ class Cors implements MiddlewareInterface
         if (in_array('*', $origins)) {
             return $response->withHeader('Access-Control-Allow-Origin', '*');
         }
-        $origin = $request->getHeader('Origin');
+        $origin = $request->getHeader('Origin')[0];
         if (in_array($origin, $origins)) {
             return $response->withHeader('Access-Control-Allow-Origin', $origin);
         }
