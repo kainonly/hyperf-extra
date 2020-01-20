@@ -33,13 +33,13 @@ class CorsFactory implements CorsInterface
      * Sets the Access-Control-Max-Age response header.
      * @var int
      */
-    private int $max_age = 0;
+    private int $max_age;
 
     /**
      * Sets the Access-Control-Allow-Credentials header.
      * @var bool
      */
-    private bool $allowed_credentials = false;
+    private bool $allowed_credentials;
 
     /**
      * CorsFactory constructor.
