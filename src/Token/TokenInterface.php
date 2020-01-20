@@ -13,10 +13,10 @@ interface TokenInterface
      * @param string $scene
      * @param string $jti
      * @param string $ack
-     * @param array $symbol
+     * @param stdClass|null $symbol
      * @return Token
      */
-    public function create(string $scene, string $jti, string $ack, array $symbol = []): Token;
+    public function create(string $scene, string $jti, string $ack, ?stdClass $symbol): Token;
 
     /**
      * Get token

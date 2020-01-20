@@ -7,6 +7,7 @@ use Hyperf\Extra\Token\TokenInterface;
 use Hyperf\Utils\ApplicationContext;
 use Lcobucci\JWT\Token;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class TokenTest extends TestCase
 {
@@ -14,7 +15,7 @@ class TokenTest extends TestCase
     private string $scene;
     private string $jti;
     private string $ack;
-    private array $symbol;
+    private stdClass $symbol;
 
     public function __construct($name = null, array $data = [], $dataName = '')
     {
@@ -29,12 +30,11 @@ class TokenTest extends TestCase
         $this->scene = 'default';
         $this->jti = 'test';
         $this->ack = md5('test');
-        $this->symbol = [
-            'role' => '*'
-        ];
+        $this->symbol = new stdClass();
+        $this->symbol->role = ['*'];
     }
 
-    public function testCreate()
+    public function testCreate(): string
     {
         $token = $this->token->create(
             $this->scene,
@@ -48,8 +48,9 @@ class TokenTest extends TestCase
 
     /**
      * @depends testCreate
+     * @param string $tokenString
      */
-    public function testGet(string $tokenString)
+    public function testGet(string $tokenString): void
     {
         $token = $this->token->get($tokenString);
         $this->assertInstanceOf(Token::class, $token);
@@ -58,8 +59,9 @@ class TokenTest extends TestCase
 
     /**
      * @depends testCreate
+     * @param string $tokenString
      */
-    public function testVerify(string $tokenString)
+    public function testVerify(string $tokenString): void
     {
         $result = $this->token->verify('default', $tokenString);
         $this->assertIsBool($result->expired, '未生成超时状态');
