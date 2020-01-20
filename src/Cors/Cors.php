@@ -12,12 +12,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class Cors implements MiddlewareInterface
 {
-    private ContainerInterface $container;
     private CorsInterface $cors;
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
         $this->cors = $container->get(CorsInterface::class);
     }
 
@@ -38,11 +36,11 @@ class Cors implements MiddlewareInterface
         if (!empty($maxAge)) {
             $response = $response->withHeader('Access-Control-Max-Age', $maxAge);
         }
-        if ($this->cors->isAllowedCredentials() == true) {
+        if ($this->cors->isAllowedCredentials() === true) {
             $response = $response->withHeader('Access-Control-Allow-Credentials', 'true');
         }
         Context::set(ResponseInterface::class, $response);
-        if ($request->getMethod() == 'OPTIONS') {
+        if ($request->getMethod() === 'OPTIONS') {
             return $response;
         }
         return $handler->handle($request);
@@ -57,11 +55,14 @@ class Cors implements MiddlewareInterface
     private function setOrigin(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $origins = $this->cors->getAllowedOrigins();
-        if (in_array('*', $origins)) {
+        if (in_array('*', $origins, true)) {
             return $response->withHeader('Access-Control-Allow-Origin', '*');
         }
+        if (empty($request->getHeader('Origin'))) {
+            return $response;
+        }
         $origin = $request->getHeader('Origin')[0];
-        if (in_array($origin, $origins)) {
+        if (in_array($origin, $origins, true)) {
             return $response->withHeader('Access-Control-Allow-Origin', $origin);
         }
         return $response;
@@ -79,11 +80,10 @@ class Cors implements MiddlewareInterface
         if (empty($options)) {
             return $response;
         }
-        if (in_array('*', $options)) {
+        if (in_array('*', $options, true)) {
             return $response->withHeader($name, '*');
-        } else {
-            return $response->withHeader($name, join(',', $options));
         }
+        return $response->withHeader($name, implode(',', $options));
     }
 
 }
