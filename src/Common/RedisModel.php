@@ -24,7 +24,7 @@ abstract class RedisModel
      * @param ContainerInterface $container
      * @return static
      */
-    public static function create(ContainerInterface $container)
+    public static function create(ContainerInterface $container): RedisModel
     {
         return make(static::class, [
             $container
