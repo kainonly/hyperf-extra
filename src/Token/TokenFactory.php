@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Hyperf\Extra\Token;
 
 use stdClass;
-use Hyperf\HttpServer\Exception\Http\InvalidResponseException;
 use Hyperf\Server\Exception\RuntimeException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
@@ -85,9 +84,9 @@ class TokenFactory implements TokenInterface
             throw new RuntimeException('Token validation is incorrect');
         }
 
-        if ($token->getClaim('iss') != $this->options[$scene]['issuer'] ||
-            $token->getClaim('aud') != $this->options[$scene]['audience']) {
-            throw new InvalidResponseException('Token information is incorrect');
+        if ($token->getClaim('iss') !== $this->options[$scene]['issuer'] ||
+            $token->getClaim('aud') !== $this->options[$scene]['audience']) {
+            throw new RuntimeException('Token information is incorrect');
         }
 
         $result = new stdClass();

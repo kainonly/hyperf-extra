@@ -10,7 +10,7 @@ use Ramsey\Uuid\UuidInterface;
 
 class UtilsFactory implements UtilsInterface
 {
-    private array $cookieOption = [];
+    private array $cookieOption;
 
     /**
      * UtilsService constructor.
