@@ -14,7 +14,10 @@
   "autoload": {
     "psr-4": {
       "Hyperf\\Extra\\": "src/"
-    }
+    },
+    "files": [
+      "src/helper.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

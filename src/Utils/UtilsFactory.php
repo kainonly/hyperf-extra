@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Utils;
 
-use Exception;
 use Hyperf\HttpMessage\Cookie\Cookie;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 class UtilsFactory implements UtilsInterface
 {
@@ -27,16 +24,6 @@ class UtilsFactory implements UtilsInterface
         $this->cookieOption['setcookie'] ??= true;
         $this->cookieOption['raw'] ??= false;
         $this->cookieOption['samesite'] ??= null;
-    }
-
-    /**
-     * Create Uuid V4 Object
-     * @return UuidInterface
-     * @throws Exception
-     */
-    public function uuid(): UuidInterface
-    {
-        return Uuid::uuid4();
     }
 
     /**
