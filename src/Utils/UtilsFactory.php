@@ -21,7 +21,6 @@ class UtilsFactory implements UtilsInterface
         $this->cookieOption['domain'] ??= '';
         $this->cookieOption['secure'] ??= false;
         $this->cookieOption['httponly'] ??= false;
-        $this->cookieOption['setcookie'] ??= true;
         $this->cookieOption['raw'] ??= false;
         $this->cookieOption['samesite'] ??= null;
     }
