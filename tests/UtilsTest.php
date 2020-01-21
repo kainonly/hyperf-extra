@@ -26,7 +26,7 @@ class UtilsTest extends TestCase
      */
     public function testUuid()
     {
-        $uuid = $this->utils->uuid();
+        $uuid = uuid();
         $this->assertInstanceOf(Uuid::class, $uuid);
         $this->assertNotEmpty($uuid->toString());
     }
