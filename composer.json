@@ -1,14 +1,14 @@
 {
   "name": "kain/hyperf-extra",
-  "description": "Extra library for Hyperf framework",
+  "description": "辅助 Hyperf 常用扩展的工具集",
   "require": {
     "php": ">=7.4",
-    "ext-swoole": ">=4.4",
     "hyperf/framework": "~1.1.0",
     "ramsey/uuid": "^3.8",
     "lcobucci/jwt": "^3.3"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-master",
     "hyperf/testing": "~1.1.0"
   },
   "autoload": {
