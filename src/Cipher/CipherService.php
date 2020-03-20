@@ -11,9 +11,11 @@ class CipherService
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get(ConfigInterface::class);
-        $options = $config->get('hashing');
+        $key = $config->get('app_key');
+        $iv = $config->get('app_name');
         return make(CipherFactory::class, [
-            $options
+            $key,
+            $iv
         ]);
     }
 }
