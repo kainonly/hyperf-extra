@@ -5,7 +5,9 @@
     "php": ">=7.4",
     "hyperf/framework": "~1.1.0",
     "ramsey/uuid": "^3.8",
-    "lcobucci/jwt": "^3.3"
+    "lcobucci/jwt": "^3.3",
+    "phpseclib/phpseclib": "^2.0",
+    "danielstjules/stringy": "^3.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",

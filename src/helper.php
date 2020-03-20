@@ -5,6 +5,7 @@ use Hyperf\HttpServer\Router\Router;
 use Hyperf\Utils\Str;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Stringy\Stringy;
 
 if (!function_exists('AutoController')) {
     /**
@@ -52,5 +53,18 @@ if (!function_exists('uuid')) {
     function uuid(): UuidInterface
     {
         return Uuid::uuid4();
+    }
+}
+
+if (!function_exists('stringy')) {
+    /**
+     * Create Stringy
+     * @param string $str
+     * @param string $encoding
+     * @return Stringy
+     */
+    function stringy(string $str, string $encoding = ''): Stringy
+    {
+        return Stringy::create($str, $encoding);
     }
 }
