@@ -20,18 +20,6 @@ abstract class RedisModel
     protected Redis $redis;
 
     /**
-     * Create RedisModel
-     * @param ContainerInterface $container
-     * @return static
-     */
-    public static function create(ContainerInterface $container): RedisModel
-    {
-        return make(static::class, [
-            $container
-        ]);
-    }
-
-    /**
      * RedisModel constructor.
      * @param ContainerInterface $container
      */
