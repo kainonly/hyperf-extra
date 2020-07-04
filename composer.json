@@ -3,7 +3,7 @@
   "description": "辅助 Hyperf 常用扩展的工具集",
   "require": {
     "php": ">=7.4",
-    "hyperf/framework": "~1.1.0",
+    "hyperf/framework": "~2.0.0",
     "ramsey/uuid": "^3.8",
     "lcobucci/jwt": "^3.3",
     "phpseclib/phpseclib": "^2.0",
