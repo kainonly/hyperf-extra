@@ -52,9 +52,7 @@ class CipherFactory implements CipherInterface
             return base64_encode($cipher->encrypt($context));
         }
         if (is_array($context)) {
-            return base64_encode($cipher->encrypt(
-                json_encode($context, JSON_THROW_ON_ERROR, 512)
-            ));
+            return base64_encode($cipher->encrypt(json_encode($context)));
         }
         return '';
     }
@@ -69,7 +67,6 @@ class CipherFactory implements CipherInterface
     {
         $cipher = $this->factoryCipher();
         $data = $cipher->decrypt(base64_decode($ciphertext));
-        return stringy($data)->isJson()
-        && $auto_conver ? json_decode($data, true, 512, JSON_THROW_ON_ERROR) : $data;
+        return stringy($data)->isJson() && $auto_conver ? json_decode($data, true) : $data;
     }
 }

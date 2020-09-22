@@ -19,7 +19,7 @@ if (!function_exists('AutoController')) {
         $path = Str::snake(Str::before($reflect->getShortName(), 'Controller'), '_');
         $methods = array_filter(
             $reflect->getMethods(ReflectionMethod::IS_PUBLIC),
-            fn($v) => !in_array($v->name, config('curd.auto.ignore'), true)
+            static fn($v) => !in_array($v->name, config('curd.auto.ignore'), true)
         );
         $middlewares = $options['middleware'] ?? [];
         foreach ($methods as $method) {

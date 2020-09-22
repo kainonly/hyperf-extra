@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class CipherTest extends TestCase
 {
     private CipherInterface $cipher;
-    private $data = [
+    private array $data = [
         'name' => 'kain'
     ];
 
@@ -24,10 +24,10 @@ class CipherTest extends TestCase
     /**
      * @return string
      */
-    public function testEncrypt()
+    public function testEncrypt(): string
     {
         $context = $this->cipher->encrypt($this->data);
-        $this->assertNotEmpty($context, '加密不成功');
+        self::assertNotEmpty($context, '加密不成功');
         return $context;
     }
 
@@ -35,9 +35,9 @@ class CipherTest extends TestCase
      * @param string $context
      * @depends testEncrypt
      */
-    public function testDecrypt(string $context)
+    public function testDecrypt(string $context): void
     {
         $result = $this->cipher->decrypt($context);
-        $this->assertEquals($this->data, $result, '解密信息不对称');
+        self::assertEquals($this->data, $result, '解密信息不对称');
     }
 }

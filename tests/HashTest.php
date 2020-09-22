@@ -19,7 +19,7 @@ class HashTest extends TestCase
         $this->hash = $container->get(HashInterface::class);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->password = 'mypassword';
@@ -28,15 +28,16 @@ class HashTest extends TestCase
     public function testCreateHash()
     {
         $hashContext = $this->hash->create($this->password);
-        $this->assertNotEmpty($hashContext);
+        self::assertNotEmpty($hashContext);
         return $hashContext;
     }
 
     /**
      * @depends testCreateHash
+     * @param string $context
      */
-    public function testCheckHash(string $context)
+    public function testCheckHash(string $context): void
     {
-        $this->assertTrue($this->hash->check($this->password, $context));
+        self::assertTrue($this->hash->check($this->password, $context));
     }
 }

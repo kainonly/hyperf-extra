@@ -24,7 +24,7 @@ class TokenTest extends TestCase
         $this->token = $container->get(TokenInterface::class);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->scene = 'default';
@@ -42,7 +42,7 @@ class TokenTest extends TestCase
             $this->ack,
             $this->symbol
         );
-        $this->assertNotEmpty((string)$token, '令牌创建失败');
+        self::assertNotEmpty((string)$token, '令牌创建失败');
         return (string)$token;
     }
 
@@ -53,8 +53,7 @@ class TokenTest extends TestCase
     public function testGet(string $tokenString): void
     {
         $token = $this->token->get($tokenString);
-        $this->assertInstanceOf(Token::class, $token);
-        $this->assertEquals($this->jti, $token->getClaim('jti'));
+        self::assertEquals($this->jti, $token->getClaim('jti'));
     }
 
     /**
@@ -64,8 +63,8 @@ class TokenTest extends TestCase
     public function testVerify(string $tokenString): void
     {
         $result = $this->token->verify('default', $tokenString);
-        $this->assertIsBool($result->expired, '未生成超时状态');
-        $this->assertInstanceOf(Token::class, $result->token, '令牌信息获取失败');
-        $this->assertEquals($this->jti, $result->token->getClaim('jti'));
+        self::assertIsBool($result->expired, '未生成超时状态');
+        self::assertInstanceOf(Token::class, $result->token, '令牌信息获取失败');
+        self::assertEquals($this->jti, $result->token->getClaim('jti'));
     }
 }
