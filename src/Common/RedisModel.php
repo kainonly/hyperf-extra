@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Common;
 
+use Hyperf\Config\Config;
+use Hyperf\Contract\ConfigInterface;
 use Hyperf\Redis\Redis;
 use Psr\Container\ContainerInterface;
 
@@ -27,5 +29,16 @@ abstract class RedisModel
     {
         $this->container = $container;
         $this->redis = $container->get(\Redis::class);
+    }
+
+    /**
+     * 获取键名
+     * @param string $name
+     * @return string
+     */
+    protected function getKey(string $name = ''): string
+    {
+        $config = $this->container->get(ConfigInterface::class);
+        return $config->get('app_name') . ':' . $this->key . $name;
     }
 }
