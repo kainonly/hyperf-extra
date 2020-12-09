@@ -3,56 +3,17 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Hash;
 
-class HashFactory implements HashInterface
+use Hyperf\Contract\ConfigInterface;
+use Psr\Container\ContainerInterface;
+
+class HashFactory
 {
-    private string $algo;
-    private array $options;
-
-    /**
-     * HashService constructor.
-     * @param array $options
-     */
-    public function __construct(array $options)
+    public function __invoke(ContainerInterface $container)
     {
-        switch ($options['driver']) {
-            case 'argon2id':
-                $this->algo = PASSWORD_ARGON2ID;
-                $this->options = $options['argon'];
-                break;
-            case 'argon':
-                $this->algo = PASSWORD_ARGON2I;
-                $this->options = $options['argon'];
-                break;
-            case 'bcrypt':
-                $this->algo = PASSWORD_BCRYPT;
-                $this->options = $options['bcrypt'];
-                break;
-        }
-    }
-
-    /**
-     * @param string $password
-     * @param array $options
-     * @return false|string|null
-     * @inheritDoc
-     */
-    public function create(string $password, array $options = [])
-    {
-        return password_hash(
-            $password,
-            $this->algo,
-            $options ?? $this->options
-        );
-    }
-
-    /**
-     * @param string $password
-     * @param string $hashPassword
-     * @return bool
-     * @inheritDoc
-     */
-    public function check(string $password, string $hashPassword): bool
-    {
-        return password_verify($password, $hashPassword);
+        $config = $container->get(ConfigInterface::class);
+        $options = $config->get('hashing');
+        return make(Hash::class, [
+            $options
+        ]);
     }
 }

@@ -15,7 +15,7 @@ class TokenTest extends TestCase
     private string $scene;
     private string $jti;
     private string $ack;
-    private stdClass $symbol;
+    private array $symbol;
 
     public function __construct($name = null, array $data = [], $dataName = '')
     {
@@ -30,8 +30,9 @@ class TokenTest extends TestCase
         $this->scene = 'default';
         $this->jti = 'test';
         $this->ack = md5('test');
-        $this->symbol = new stdClass();
-        $this->symbol->role = ['*'];
+        $this->symbol = [
+            'role' => ['*']
+        ];
     }
 
     public function testCreate(): string
@@ -53,7 +54,8 @@ class TokenTest extends TestCase
     public function testGet(string $tokenString): void
     {
         $token = $this->token->get($tokenString);
-        self::assertEquals($this->jti, $token->getClaim('jti'));
+        assert($token instanceof Token);
+        self::assertEquals($this->jti, $token->claims()->get('jti'));
     }
 
     /**

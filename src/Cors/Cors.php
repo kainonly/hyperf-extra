@@ -3,87 +3,103 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Cors;
 
-use Hyperf\Utils\Context;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-
-class Cors implements MiddlewareInterface
+class Cors implements CorsInterface
 {
-    private CorsInterface $cors;
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->cors = $container->get(CorsInterface::class);
-    }
-
     /**
-     * @inheritDoc
+     * Matches the request method. `[*]` allows all methods.
+     * @var array
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-        /**
-         * @var $response ResponseInterface
-         */
-        $response = Context::get(ResponseInterface::class);
-        $response = $this->setOrigin($request, $response);
-        $response = $this->withHeader($response, 'Access-Control-Allow-Methods', $this->cors->getAllowedMethods());
-        $response = $this->withHeader($response, 'Access-Control-Allow-Headers', $this->cors->getAllowedHeaders());
-        $response = $this->withHeader($response, 'Access-Control-Expose-Headers', $this->cors->getExposedHeaders());
-        $maxAge = $this->cors->getMaxAge();
-        if (!empty($maxAge)) {
-            $response = $response->withHeader('Access-Control-Max-Age', $maxAge);
-        }
-        if ($this->cors->isAllowedCredentials() === true) {
-            $response = $response->withHeader('Access-Control-Allow-Credentials', 'true');
-        }
-        Context::set(ResponseInterface::class, $response);
-        if ($request->getMethod() === 'OPTIONS') {
-            return $response;
-        }
-        return $handler->handle($request);
-    }
+    private array $allowed_methods;
 
     /**
-     * Set Access-Control-Allow-Origin
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
+     * Matches the request origin. `[*]` allows all origins.
+     * @var array
      */
-    private function setOrigin(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
-        $origins = $this->cors->getAllowedOrigins();
-        if (in_array('*', $origins, true)) {
-            return $response->withHeader('Access-Control-Allow-Origin', '*');
-        }
-        if (empty($request->getHeader('Origin'))) {
-            return $response;
-        }
-        $origin = $request->getHeader('Origin')[0];
-        if (in_array($origin, $origins, true)) {
-            return $response->withHeader('Access-Control-Allow-Origin', $origin);
-        }
-        return $response;
-    }
+    private array $allowed_origins;
 
     /**
-     * Set Mutli Header
-     * @param ResponseInterface $response
-     * @param string $name
+     * Sets the Access-Control-Allow-Headers response header. `[*]` allows all headers.
+     * @var array
+     */
+    private array $allowed_headers;
+
+    /**
+     * Sets the Access-Control-Expose-Headers response header.
+     * @var array
+     */
+    private array $exposed_headers;
+
+    /**
+     * Sets the Access-Control-Max-Age response header.
+     * @var int
+     */
+    private int $max_age;
+
+    /**
+     * Sets the Access-Control-Allow-Credentials header.
+     * @var bool
+     */
+    private bool $allowed_credentials;
+
+    /**
+     * CorsService constructor.
      * @param array $options
-     * @return ResponseInterface
      */
-    private function withHeader(ResponseInterface $response, string $name, array $options): ResponseInterface
+    public function __construct(array $options)
     {
-        if (empty($options)) {
-            return $response;
-        }
-        if (in_array('*', $options, true)) {
-            return $response->withHeader($name, '*');
-        }
-        return $response->withHeader($name, implode(',', $options));
+        $this->allowed_methods = $options['allowed_methods'] ?? ['*'];
+        $this->allowed_origins = $options['allowed_origins'] ?? ['*'];
+        $this->allowed_headers = $options['allowed_headers'] ?? ['*'];
+        $this->exposed_headers = $options['exposed_headers'] ?? [];
+        $this->max_age = $options['max_age'] ?? 0;
+        $this->allowed_credentials = $options['allowed_credentials'] ?? false;
     }
 
+    /**
+     * @return array
+     */
+    public function getAllowedMethods(): array
+    {
+        return $this->allowed_methods;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedOrigins(): array
+    {
+        return $this->allowed_origins;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedHeaders(): array
+    {
+        return $this->allowed_headers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExposedHeaders(): array
+    {
+        return $this->exposed_headers;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxAge(): int
+    {
+        return $this->max_age;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowedCredentials(): bool
+    {
+        return $this->allowed_credentials;
+    }
 }
