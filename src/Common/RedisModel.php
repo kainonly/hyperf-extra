@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Common;
 
-use Hyperf\Config\Config;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Redis\Redis;
 use Psr\Container\ContainerInterface;

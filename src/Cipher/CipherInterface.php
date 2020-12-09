@@ -15,7 +15,7 @@ interface CipherInterface
     /**
      * decrypt
      * @param string $ciphertext Ciphertext
-     * @param bool $is_array is array
+     * @param bool $auto_conver
      * @return string|array Conversion data
      */
     public function decrypt(string $ciphertext, bool $auto_conver = true);

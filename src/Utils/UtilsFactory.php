@@ -3,48 +3,17 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Utils;
 
-use Hyperf\HttpMessage\Cookie\Cookie;
+use Hyperf\Contract\ConfigInterface;
+use Psr\Container\ContainerInterface;
 
-class UtilsFactory implements UtilsInterface
+class UtilsFactory
 {
-    private array $cookieOption;
-
-    /**
-     * UtilsService constructor.
-     * @param array $cookieOption
-     */
-    public function __construct(array $cookieOption)
+    public function __invoke(ContainerInterface $container)
     {
-        $this->cookieOption = $cookieOption;
-        $this->cookieOption['expire'] ??= 0;
-        $this->cookieOption['path'] ??= '/';
-        $this->cookieOption['domain'] ??= '';
-        $this->cookieOption['secure'] ??= false;
-        $this->cookieOption['httponly'] ??= false;
-        $this->cookieOption['raw'] ??= false;
-        $this->cookieOption['samesite'] ??= null;
-    }
-
-    /**
-     * Create Cookie Object
-     * @param string $name
-     * @param string $value
-     * @param array $options
-     * @return Cookie
-     */
-    public function cookie(string $name, string $value, array $options = []): Cookie
-    {
-        $options = array_merge($this->cookieOption, $options);
-        return new Cookie(
-            $name,
-            $value,
-            $options['expire'],
-            $options['path'],
-            $options['domain'],
-            $options['secure'],
-            $options['httponly'],
-            $options['raw'],
-            $options['samesite']
-        );
+        $config = $container->get(ConfigInterface::class);
+        $cookie = $config->get('cookie');
+        return make(Utils::class, [
+            $cookie
+        ]);
     }
 }
