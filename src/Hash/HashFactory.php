@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 
 class HashFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): Hash
     {
         $config = $container->get(ConfigInterface::class);
         $options = $config->get('hashing');

@@ -8,7 +8,7 @@ use Hyperf\Contract\ContainerInterface;
 
 class CipherFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): Cipher
     {
         $config = $container->get(ConfigInterface::class);
         $key = $config->get('app_key');
