@@ -24,10 +24,8 @@ class CorsMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        /**
-         * @var $response ResponseInterface
-         */
         $response = Context::get(ResponseInterface::class);
+        assert($response instanceof ResponseInterface);
         $response = $this->setOrigin($request, $response);
         $response = $this->withHeader($response, 'Access-Control-Allow-Methods', $this->cors->getAllowedMethods());
         $response = $this->withHeader($response, 'Access-Control-Allow-Headers', $this->cors->getAllowedHeaders());

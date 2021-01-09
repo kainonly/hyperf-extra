@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 
 class UtilsFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): Utils
     {
         $config = $container->get(ConfigInterface::class);
         $cookie = $config->get('cookie');

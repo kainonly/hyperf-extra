@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 
 class TokenFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): Token
     {
         $config = $container->get(ConfigInterface::class);
         $key = $config->get('app_key');

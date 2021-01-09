@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 
 class CorsFactory
 {
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container): Cors
     {
         $config = $container->get(ConfigInterface::class);
         $options = $config->get('cors');
