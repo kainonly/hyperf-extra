@@ -3,36 +3,51 @@ declare(strict_types=1);
 
 namespace HyperfExtraTest;
 
+use Exception;
 use Hyperf\Extra\Token\TokenInterface;
 use Hyperf\Utils\ApplicationContext;
 use Lcobucci\JWT\Token;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 class TokenTest extends TestCase
 {
+    /**
+     * @var TokenInterface
+     */
     private TokenInterface $token;
+
+    /**
+     * @var string
+     */
     private string $scene;
+
+    /**
+     * @var string
+     */
     private string $jti;
+
+    /**
+     * @var string
+     */
     private string $ack;
-    private array $symbol;
+    /**
+     * @var array
+     */
+    private array $symbol = [
+        'role' => '*'
+    ];
 
-    public function __construct($name = null, array $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-        $container = ApplicationContext::getContainer();
-        $this->token = $container->get(TokenInterface::class);
-    }
-
+    /**
+     * @throws Exception
+     */
     public function setUp(): void
     {
         parent::setUp();
+        $container = ApplicationContext::getContainer();
+        $this->token = $container->get(TokenInterface::class);
         $this->scene = 'default';
-        $this->jti = 'test';
-        $this->ack = md5('test');
-        $this->symbol = [
-            'role' => ['*']
-        ];
+        $this->jti = '12345678';
+        $this->ack = 'a1b2c3';
     }
 
     public function testCreate(): string
@@ -43,30 +58,36 @@ class TokenTest extends TestCase
             $this->ack,
             $this->symbol
         );
-        self::assertNotEmpty((string)$token, '令牌创建失败');
-        return (string)$token;
+        self::assertNotEmpty($token->payload(), '令牌创建失败');
+        return $token->toString();
     }
 
     /**
      * @depends testCreate
-     * @param string $tokenString
+     * @param string $jwt
      */
-    public function testGet(string $tokenString): void
+    public function testGet(string $jwt): void
     {
-        $token = $this->token->get($tokenString);
-        assert($token instanceof Token);
-        self::assertEquals($this->jti, $token->claims()->get('jti'));
+        $token = $this->token->get($jwt);
+        $claims = $token->claims();
+        self::assertEquals($this->jti, $claims->get('jti'));
     }
 
     /**
      * @depends testCreate
-     * @param string $tokenString
+     * @param string $jwt
      */
-    public function testVerify(string $tokenString): void
+    public function testVerify(string $jwt): void
     {
-        $result = $this->token->verify('default', $tokenString);
-        self::assertIsBool($result->expired, '未生成超时状态');
-        self::assertInstanceOf(Token::class, $result->token, '令牌信息获取失败');
-        self::assertEquals($this->jti, $result->token->getClaim('jti'));
+        try {
+            $result = $this->token->verify('default', $jwt);
+            self::assertIsBool($result->expired, '未生成超时状态');
+            self::assertInstanceOf(Token::class, $result->token, '令牌信息获取失败');
+            self::assertTrue(assert($result->token instanceof Token\Plain));
+            $claims = $result->token->claims();
+            self::assertEquals($this->jti, $claims->get('jti'));
+        } catch (Exception $e) {
+            $this->expectErrorMessage($e->getMessage());
+        }
     }
 }
