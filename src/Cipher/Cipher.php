@@ -3,40 +3,42 @@ declare(strict_types=1);
 
 namespace Hyperf\Extra\Cipher;
 
-use phpseclib\Crypt\AES;
+use phpseclib3\Crypt\ChaCha20;
+use phpseclib3\Crypt\Common\SymmetricKey;
 
 class Cipher implements CipherInterface
 {
     /**
-     * @var string key
+     * @var string 密钥
      */
     private string $key;
 
     /**
-     * @var string iv
+     * @var string 参考量
      */
-    private string $iv;
+    private string $mixed;
 
     /**
      * CipherService constructor.
      * @param string $key
-     * @param string $iv
+     * @param string $mixed
      */
-    public function __construct(string $key, string $iv)
+    public function __construct(string $key, string $mixed)
     {
         $this->key = $key;
-        $this->iv = $iv;
+        $this->mixed = $mixed;
     }
 
     /**
-     * Factory Cipher
-     * @return AES
+     * 生产加密工具
+     * @return SymmetricKey
      */
-    private function factoryCipher(): AES
+    private function factoryCipher(): SymmetricKey
     {
-        $cipher = new AES();
+        $cipher = new ChaCha20();
         $cipher->setKey($this->key);
-        $cipher->setIV($this->iv);
+        $nonce = str_pad(substr($this->mixed, 0, 8), 8, "\0");
+        $cipher->setNonce($nonce);
         return $cipher;
     }
 

@@ -12,10 +12,10 @@ class CipherFactory
     {
         $config = $container->get(ConfigInterface::class);
         $key = $config->get('app_key');
-        $iv = $config->get('app_name');
+        $mixed = $config->get('app_name');
         return make(Cipher::class, [
             $key,
-            $iv
+            $mixed
         ]);
     }
 }
