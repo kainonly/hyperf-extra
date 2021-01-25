@@ -1,6 +1,6 @@
 # Hyperf Extra
 
-辅助 Hyperf 常用扩展的工具集，案例文档 [hyperf-api-case](https://hyperf.kainonly.com)
+辅助 Hyperf 常用扩展的工具集
 
 ![Packagist Version](https://img.shields.io/packagist/v/kain/hyperf-extra.svg?style=flat-square)
 ![Packagist](https://img.shields.io/packagist/dt/kain/hyperf-extra.svg?color=blue&style=flat-square)
