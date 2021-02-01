@@ -5,6 +5,7 @@ namespace Hyperf\Extra\Rbac;
 
 use Hyperf\Extra\Redis\Library\AclLibrary;
 use Hyperf\Extra\Redis\Library\RoleLibrary;
+use Hyperf\Extra\Redis\Library\UserLibrary;
 use Hyperf\HttpServer\Response;
 use Hyperf\Utils\Context;
 use Hyperf\Utils\Str;
@@ -19,11 +20,13 @@ abstract class RbacMiddleware implements MiddlewareInterface
     protected array $ignore = [];
     private RoleLibrary $roleRedis;
     private AclLibrary $aclRedis;
+    private UserLibrary $userRedis;
 
-    public function __construct(RoleLibrary $role, AclLibrary $acl)
+    public function __construct(RoleLibrary $role, AclLibrary $acl, UserLibrary $user)
     {
         $this->roleRedis = $role;
         $this->aclRedis = $acl;
+        $this->userRedis = $user;
     }
 
     /**
@@ -40,8 +43,8 @@ abstract class RbacMiddleware implements MiddlewareInterface
                 }
             }
         }
-
-        $roleKey = Context::get('auth')['role'];
+        $user = $this->userRedis->get(Context::get('auth')['user']);
+        $roleKey = explode(',', $user['role']);
         $roleLists = $this->roleRedis->get($roleKey, 'acl');
         rsort($roleLists);
         $policy = null;
