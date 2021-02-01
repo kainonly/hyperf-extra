@@ -27,7 +27,11 @@ abstract class AuthMiddleware implements MiddlewareInterface
      * @param UtilsInterface $utils
      * @param RefreshToken $refreshToken
      */
-    public function __construct(TokenInterface $token, UtilsInterface $utils, RefreshToken $refreshToken)
+    public function __construct(
+        TokenInterface $token,
+        UtilsInterface $utils,
+        RefreshToken $refreshToken
+    )
     {
         $this->token = $token;
         $this->utils = $utils;
@@ -59,9 +63,9 @@ abstract class AuthMiddleware implements MiddlewareInterface
         $token = $result->token;
         $claims = $token->claims();
         $symbol = $claims->get('symbol');
+        $jti = $claims->get('jti');
+        $ack = $claims->get('ack');
         if ($result->expired) {
-            $jti = $claims->get('jti');
-            $ack = $claims->get('ack');
             $verify = $this->refreshToken->verify($jti, $ack);
             if (!$verify) {
                 return (new Response())->json([
@@ -73,6 +77,7 @@ abstract class AuthMiddleware implements MiddlewareInterface
             $cookie = $this->utils->cookie($this->scene . '_token', $newToken->toString());
             $response = $response->withCookie($cookie);
         }
+        $this->refreshToken->renewal($jti, 3600);
         Context::set('auth', $symbol);
         Context::set(ResponseInterface::class, $response);
         return $handler->handle($request);

@@ -35,6 +35,16 @@ class RefreshToken extends RedisModel
     }
 
     /**
+     * Renewal Refresh Token
+     * @param string $jti
+     * @param int $expires
+     */
+    public function renewal(string $jti, int $expires): void
+    {
+        $this->redis->expire($this->getKey($jti), $expires);
+    }
+
+    /**
      * Verify Refresh Token
      * @param string $jti Token ID
      * @param string $ack Ack Code
