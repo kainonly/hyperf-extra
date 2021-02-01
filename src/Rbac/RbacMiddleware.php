@@ -47,7 +47,7 @@ abstract class RbacMiddleware implements MiddlewareInterface
         $roleKey = explode(',', $user['role']);
         $acl = [
             ...$this->roleRedis->get($roleKey, 'acl'),
-            ... explode(',', $user['acl'])
+            ...!empty($user['acl']) ? explode(',', $user['acl']) : []
         ];
         $activePolicy = null;
         foreach ($acl as $value) {
