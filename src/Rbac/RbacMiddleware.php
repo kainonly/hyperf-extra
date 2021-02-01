@@ -45,34 +45,35 @@ abstract class RbacMiddleware implements MiddlewareInterface
         }
         $user = $this->userRedis->get(Context::get('auth')['user']);
         $roleKey = explode(',', $user['role']);
-        $roleLists = $this->roleRedis->get($roleKey, 'acl');
-        rsort($roleLists);
-        $policy = null;
-        foreach ($roleLists as $k => $value) {
-            [$roleController, $roleAction] = explode(':', $value);
-            if ($roleController === $controller) {
-                $policy = $roleAction;
-                break;
+        $acl = [
+            ...$this->roleRedis->get($roleKey, 'acl'),
+            ... explode(',', $user['acl'])
+        ];
+        $activePolicy = null;
+        foreach ($acl as $value) {
+            [$aclKey, $policy] = explode(':', $value);
+            if ($controller === $aclKey) {
+                $activePolicy = $policy;
+                if ($policy === 1) {
+                    break;
+                }
             }
         }
-
-        if ($policy === null) {
+        if ($activePolicy === null) {
             return (new Response())->json([
                 'error' => 1,
                 'msg' => 'rbac invalid, policy is empty'
             ]);
         }
-
-        $aclLists = $this->aclRedis->get($controller, (int)$policy);
-
-        if (empty($aclLists)) {
+        $lists = $this->aclRedis->get($controller, (int)$activePolicy);
+        if (empty($lists)) {
             return (new Response())->json([
                 'error' => 1,
                 'msg' => 'rbac invalid, acl is empty'
             ]);
         }
 
-        if (!in_array($action, $aclLists, true)) {
+        if (!in_array($action, $lists, true)) {
             return (new Response())->json([
                 'error' => 1,
                 'msg' => 'rbac invalid, access denied'
