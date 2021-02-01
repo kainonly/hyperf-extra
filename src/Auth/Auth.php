@@ -29,14 +29,6 @@ use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
  */
 trait Auth
 {
-    /**
-     * Set RefreshToken Expires
-     * @return int
-     */
-    protected function refreshTokenExpires(): int
-    {
-        return 604800;
-    }
 
     /**
      * Create Cookie Auth
@@ -49,7 +41,7 @@ trait Auth
     {
         $jti = uuid()->toString();
         $ack = Str::random();
-        $result = $this->refreshToken->factory($jti, $ack, $this->refreshTokenExpires());
+        $result = $this->refreshToken->factory($jti, $ack, 3600);
         if (!$result) {
             return $this->response->json([
                 'error' => 1,
@@ -79,12 +71,12 @@ trait Auth
             }
 
             $result = $this->token->verify($scene, $jwt);
+            assert($result->token instanceof Token\Plain);
+            $token = $result->token;
+            $claims = $token->claims();
+            $jti = $claims->get('jti');
+            $ack = $claims->get('ack');
             if ($result->expired) {
-                assert($result->token instanceof Token\Plain);
-                $token = $result->token;
-                $claims = $token->claims();
-                $jti = $claims->get('jti');
-                $ack = $claims->get('ack');
                 $verify = $this->refreshToken->verify($jti, $ack);
                 if (!$verify) {
                     throw new InvalidResponseException('refresh token verification expired');
@@ -97,7 +89,7 @@ trait Auth
                     'msg' => 'ok'
                 ]);
             }
-
+            $this->refreshToken->renewal($jwt, 3600);
             return $this->response->json([
                 'error' => 0,
                 'msg' => 'ok'
