@@ -63,23 +63,23 @@ class Token implements TokenInterface
     }
 
     /**
-     * @param string $jwt
+     * @param string $tokenString
      * @inheritDoc
      */
-    public function get(string $jwt): Plain
+    public function get(string $tokenString): Plain
     {
-        $token = $this->config->parser()->parse($jwt);
+        $token = $this->config->parser()->parse($tokenString);
         assert($token instanceof Plain);
         return $token;
     }
 
     /**
      * @param string $scene
-     * @param string $jwt
+     * @param string $tokenString
      * @return stdClass
      * @inheritDoc
      */
-    public function verify(string $scene, string $jwt): stdClass
+    public function verify(string $scene, string $tokenString): stdClass
     {
         if (empty($this->options[$scene])) {
             throw new InvalidArgumentException("The [{$scene}] does not exist.");
@@ -89,7 +89,7 @@ class Token implements TokenInterface
             new PermittedFor($this->options[$scene]['audience']),
             new SignedWith($this->config->signer(), $this->config->signingKey())
         );
-        $token = $this->config->parser()->parse($jwt);
+        $token = $this->config->parser()->parse($tokenString);
         $constraints = $this->config->validationConstraints();
         if (!$this->config->validator()->validate($token, ...$constraints)) {
             throw new InvalidArgumentException('Token validation is incorrect');

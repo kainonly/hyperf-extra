@@ -65,12 +65,12 @@ trait Auth
     protected function authVerify($scene): PsrResponseInterface
     {
         try {
-            $jwt = $this->request->cookie($scene . '_token');
-            if (empty($jwt)) {
+            $tokenString = $this->request->cookie($scene . '_token');
+            if (empty($tokenString)) {
                 throw new InvalidResponseException('refresh token not exists');
             }
 
-            $result = $this->token->verify($scene, $jwt);
+            $result = $this->token->verify($scene, $tokenString);
             assert($result->token instanceof Token\Plain);
             $token = $result->token;
             $claims = $token->claims();
@@ -89,7 +89,7 @@ trait Auth
                     'msg' => 'ok'
                 ]);
             }
-            $this->refreshToken->renewal($jwt, 3600);
+            $this->refreshToken->renewal($jti, 3600);
             return $this->response->json([
                 'error' => 0,
                 'msg' => 'ok'
@@ -110,9 +110,9 @@ trait Auth
      */
     protected function destory(string $scene): PsrResponseInterface
     {
-        $jwt = $this->request->cookie($scene . '_token');
-        if (!empty($jwt)) {
-            $token = $this->token->get($jwt);
+        $tokenString = $this->request->cookie($scene . '_token');
+        if (!empty($tokenString)) {
+            $token = $this->token->get($tokenString);
             $claims = $token->claims();
             $this->refreshToken->clear(
                 $claims->get('jti'),

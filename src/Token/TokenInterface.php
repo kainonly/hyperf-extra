@@ -20,16 +20,16 @@ interface TokenInterface
 
     /**
      * 获取令牌对象
-     * @param string $jwt JWT字符串
+     * @param string $tokenString JWT字符串
      * @return Plain
      */
-    public function get(string $jwt): Plain;
+    public function get(string $tokenString): Plain;
 
     /**
      * 验证令牌
      * @param string $scene 配置场景
-     * @param string $jwt JWT字符串
+     * @param string $tokenString JWT字符串
      * @return stdClass {expired:bool 是否过期, token:Token 令牌对象}
      */
-    public function verify(string $scene, string $jwt): stdClass;
+    public function verify(string $scene, string $tokenString): stdClass;
 }
