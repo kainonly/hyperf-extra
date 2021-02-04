@@ -5,7 +5,7 @@ namespace Hyperf\Extra\Redis;
 
 class UserLock extends RedisModel
 {
-    protected string $key = 'system:user-lock:';
+    protected string $key = 'user-lock:';
 
     /**
      * 锁定用户清零
