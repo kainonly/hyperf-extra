@@ -6,11 +6,6 @@ namespace Hyperf\Extra\Redis\Library;
 interface AclLibrary
 {
     /**
-     * 清除缓存
-     */
-    public function clear(): void;
-
-    /**
      * 获取访问控制
      * @param string $key 键名
      * @param int $policy 策略
