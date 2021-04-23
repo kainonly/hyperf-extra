@@ -6,24 +6,21 @@ namespace Hyperf\Extra\Rbac;
 use Hyperf\Extra\Redis\Library\ResourceLibrary;
 use Hyperf\Extra\Redis\Library\RoleLibrary;
 use Hyperf\Extra\Redis\Library\UserLibrary;
-use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 
 trait Rbac
 {
-    protected function fetchResource(ResourceLibrary $resource, UserLibrary $user, RoleLibrary $role): array
+    protected function fetchResource(ResourceLibrary $resourceRedis, UserLibrary $userRedis, RoleLibrary $roleRedis): array
     {
-        $router = $resource->get();
-        $userData = $user->get(Context::get('auth')['user']);
+        $router = $resourceRedis->get();
+        $user = Context::get('auth')['user'];
+        $data = $userRedis->get($user);
         $resourceData = [
-            ...$role->get($userData['role'], 'resource'),
-            ...$userData['resource']
+            ...$roleRedis->get($data['role'], 'resource'),
+            ...$data['resource']
         ];
         $routerRole = array_unique($resourceData);
-        $lists = Arr::where(
-            $router,
-            fn($v) => in_array($v['key'], $routerRole, true)
-        );
+        $lists = array_filter($router, static fn($v) => in_array($v['key'], $routerRole, true));
         return array_values($lists);
     }
 }
