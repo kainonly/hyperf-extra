@@ -9,6 +9,7 @@ use Stringy\Stringy;
 
 if (!function_exists('AutoController')) {
     /**
+     * 控制器路由绑定
      * @param string $controller
      * @param array $options
      * @throws ReflectionException
@@ -46,7 +47,7 @@ if (!function_exists('AutoController')) {
 
 if (!function_exists('uuid')) {
     /**
-     * Create Uuid V4 Object
+     * 生成 UUID v4
      * @return UuidInterface
      * @throws Exception
      */
@@ -58,7 +59,7 @@ if (!function_exists('uuid')) {
 
 if (!function_exists('stringy')) {
     /**
-     * Create Stringy
+     * 创建 Stringy
      * @param string $str
      * @param string $encoding
      * @return Stringy
@@ -66,5 +67,22 @@ if (!function_exists('stringy')) {
     function stringy(string $str, string $encoding = ''): Stringy
     {
         return Stringy::create($str, $encoding);
+    }
+}
+
+if (!function_exists('get_client_ip')) {
+    /**
+     * 获取客户端 IP
+     * @return string
+     */
+    function get_client_ip(): string
+    {
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            // for php-cli(phpunit etc.)
+            $ip = defined('PHPUNIT_RUNNING') ? '127.0.0.1' : gethostbyname(gethostname());
+        }
+        return filter_var($ip, FILTER_VALIDATE_IP) ?: '127.0.0.1';
     }
 }
