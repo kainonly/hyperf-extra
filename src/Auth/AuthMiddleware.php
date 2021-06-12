@@ -48,8 +48,8 @@ abstract class AuthMiddleware implements MiddlewareInterface
         $cookies = $request->getCookieParams();
         if (empty($cookies[$this->scene . '_token'])) {
             return (new Response())->json([
-                'error' => 1,
-                'msg' => '用户认证失效'
+                'error' => 401,
+                'msg' => 'User authentication is invalid'
             ]);
         }
         /**
@@ -69,8 +69,8 @@ abstract class AuthMiddleware implements MiddlewareInterface
             $verify = $this->refreshToken->verify($jti, $ack);
             if (!$verify) {
                 return (new Response())->json([
-                    'error' => 1,
-                    'msg' => '刷新令牌已过期'
+                    'error' => 401,
+                    'msg' => 'refresh token verification expired'
                 ]);
             }
             $newToken = $this->token->create($this->scene, $jti, $ack, $symbol);

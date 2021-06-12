@@ -60,46 +60,44 @@ trait Auth
      * Auth Verify
      * @param $scene
      * @return PsrResponseInterface
-     * @throws Exception
      */
     protected function authVerify($scene): PsrResponseInterface
     {
-        try {
-            $tokenString = $this->request->cookie($scene . '_token');
-            if (empty($tokenString)) {
-                throw new InvalidResponseException('refresh token not exists');
-            }
+        $tokenString = $this->request->cookie($scene . '_token');
+        if (empty($tokenString)) {
+            return $this->response->json([
+                'error' => 401,
+                'msg' => 'refresh token not exists'
+            ]);
+        }
 
-            $result = $this->token->verify($scene, $tokenString);
-            assert($result->token instanceof Token\Plain);
-            $token = $result->token;
-            $claims = $token->claims();
-            $jti = $claims->get('jti');
-            $ack = $claims->get('ack');
-            if ($result->expired) {
-                $verify = $this->refreshToken->verify($jti, $ack);
-                if (!$verify) {
-                    throw new InvalidResponseException('refresh token verification expired');
-                }
-                $symbol = $claims->get('symbol');
-                $newToken = $this->token->create($scene, $jti, $ack, $symbol);
-                $cookie = $this->utils->cookie($scene . '_token', $newToken->toString());
-                return $this->response->withCookie($cookie)->json([
-                    'error' => 0,
-                    'msg' => 'ok'
+        $result = $this->token->verify($scene, $tokenString);
+        assert($result->token instanceof Token\Plain);
+        $token = $result->token;
+        $claims = $token->claims();
+        $jti = $claims->get('jti');
+        $ack = $claims->get('ack');
+        if ($result->expired) {
+            $verify = $this->refreshToken->verify($jti, $ack);
+            if (!$verify) {
+                return $this->response->json([
+                    'error' => 401,
+                    'msg' => 'refresh token verification expired'
                 ]);
             }
-            $this->refreshToken->renewal($jti, 3600);
-            return $this->response->json([
+            $symbol = $claims->get('symbol');
+            $newToken = $this->token->create($scene, $jti, $ack, $symbol);
+            $cookie = $this->utils->cookie($scene . '_token', $newToken->toString());
+            return $this->response->withCookie($cookie)->json([
                 'error' => 0,
                 'msg' => 'ok'
             ]);
-        } catch (InvalidResponseException $exception) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => $exception->getMessage()
-            ]);
         }
+        $this->refreshToken->renewal($jti, 3600);
+        return $this->response->json([
+            'error' => 0,
+            'msg' => 'ok'
+        ]);
     }
 
     /**
